@@ -1,0 +1,22 @@
+@import "./../variables.scss";
+
+#app-header {
+    height: 70px;
+    background-color: $header-color;
+    color: blue;
+
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    padding-left: 20px;
+    margin-bottom: 20px;
+
+    .header-link {
+        color: white;
+        font-size: 20px;
+
+        &:hover{
+            color: black;
+        }
+    }
+}
