@@ -12,7 +12,8 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
 
         //If tables do not already exist, create them and add sample data
 
-        db.run(`CREATE TABLE inventory_item (
+        //INVENTORY ITEMS
+        db.run(`CREATE TABLE item (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name text, 
             city_id INTEGER, 
@@ -21,7 +22,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             )`,
         (err) => {
             if(!err){
-                const insert_item = db.prepare("INSERT INTO inventory_item (name, city_id, stock) VALUES (?,?,?)");
+                const insert_item = db.prepare("INSERT INTO item (name, city_id, stock) VALUES (?,?,?)");
                 insert_item.run(["Ghost-PLAS-GRN", "0", "3455"]);
                 insert_item.run(["Zealot-ALUM-RED", "0", "567"]);
                 insert_item.run(["Ghost-PLAS-GRN", "1", "90"]);
@@ -32,6 +33,44 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
 
         });  
 
+
+        //SHIPMENTS
+        db.run(`CREATE TABLE shipment (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            created DATETIME DEFAULT CURRENT_TIMESTAMP
+            )`,
+        (err) => {
+            if(!err){
+                const insert_shipment = db.prepare("INSERT INTO shipment DEFAULT VALUES");
+                //Create 3 shipments
+                insert_shipment.run();
+                insert_shipment.run();
+                insert_shipment.run();
+            }
+
+        });  
+
+        //SHIPMENT ITEMS
+        db.run(`CREATE TABLE shipment_item (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            shipment_id INTEGER,
+            item_id INTEGER,
+            quantity INTEGER,
+            FOREIGN KEY(shipment_id) REFERENCES shipment(id),
+            FOREIGN KEY(item_id) REFERENCES inventory_item(id)
+            )`,
+        (err) => {
+            if(!err){
+                const insert_shipment_item = db.prepare("INSERT INTO shipment_item (shipment_id, item_id, quantity) VALUES (?,?,?)");
+                //Create 3 shipments
+                insert_shipment_item.run([1, 1, 2]);
+                insert_shipment_item.run([2, 2, 3]);
+                insert_shipment_item.run([3, 3, 4]);
+            }
+
+        });  
+
+        //CITIES
         db.run(`CREATE TABLE city (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name text, 

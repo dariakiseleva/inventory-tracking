@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from "axios";
-
+import "./../../styles/forms.css"
 
 export default function EditItem({cities, inventory, editItem, setPage, item_id}) {
 
@@ -16,7 +16,7 @@ export default function EditItem({cities, inventory, editItem, setPage, item_id}
     const processEditItem = () => {
 
         //Validate data entry
-        if (!itemName || !stock || !city) {
+        if (!itemName || !stock ){
             setError("ERROR: Incomplete form");
             return;
         }
@@ -29,7 +29,7 @@ export default function EditItem({cities, inventory, editItem, setPage, item_id}
 
         //Call to server to update the item in the database
         axios.patch(
-            `/inventory/item/${item_id}`,
+            `/item/${item_id}`,
             {itemName, stock, city}, 
             {headers: {'content-type': 'application/json'}}
         )
@@ -43,7 +43,7 @@ export default function EditItem({cities, inventory, editItem, setPage, item_id}
     return (
         <form className="inputForm">
 
-            <h1>Editing item ID {item_id}</h1>
+            <h1>Edit item ID {item_id}</h1>
 
             <label>Item name</label>
             <input 
@@ -83,7 +83,7 @@ export default function EditItem({cities, inventory, editItem, setPage, item_id}
                 })}
             </select>
 
-            <button onClick={() => processEditItem()} type="button">Submit</button>
+            <button onClick={() => processEditItem()} type="button">Save</button>
 
             {error && <p className="errorMessage">{error}</p>}
 

@@ -15,8 +15,8 @@
 .header-link {
     color: white;
     font-size: 20px;
+}
 
-    &:hover{
-        color: black;
-    }
+.header-link:hover{
+    color: black;
 }

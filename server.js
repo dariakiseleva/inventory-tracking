@@ -18,8 +18,8 @@ app.use(function(req, res, next) {
 app.use(express.json());
 
 //ACTUAL ROUTES
-app.get("/inventory/items", (req, res) => {
-    const query = "select * from inventory_item"
+app.get("/items", (req, res) => {
+    const query = "select * from item"
     db.all(query, (err, rows) => {
 
         //Rearrange the data as an object with item IDs as keys
@@ -37,31 +37,29 @@ app.get("/inventory/items", (req, res) => {
 });
 
 //CREATE NEW ITEM
-app.post("/inventory/items", (req, res) => {
+app.post("/items", (req, res) => {
 
     const {itemName, city, stock} = req.body;
-    const query = "INSERT INTO inventory_item (name, city_id, stock) VALUES (?,?,?) returning id";
+    const query = "INSERT INTO item (name, city_id, stock) VALUES (?,?,?) returning id";
     db.all(query, [itemName, city, stock], (error, returning) => {
         res.status(200).json(returning[0]);
     })    
 });
 
-
 //CHANGE ITEM DATA
-app.patch("/inventory/item/:id", (req, res) => {
+app.patch("/item/:id", (req, res) => {
     const id = req.params.id;
     const {itemName, city, stock} = req.body;
-    const query = `UPDATE inventory_item SET name="${itemName}", city_id=${city}, stock=${stock} WHERE id=${id}`;
+    const query = `UPDATE item SET name="${itemName}", city_id=${city}, stock=${stock} WHERE id=${id}`;
     db.all(query, () => {
         res.status(200).json({})
     })    
 })
 
-
 //DELETE ITEM
-app.delete("/inventory/item/:id", (req, res) => {
+app.delete("/item/:id", (req, res) => {
     const id = req.params.id;
-    const query = `DELETE FROM inventory_item WHERE id=${id};`
+    const query = `DELETE FROM item WHERE id=${id};`
     db.all(query, (err) => {
         return res.status(200).json({});
     });

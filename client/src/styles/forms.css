@@ -1,0 +1,36 @@
+
+.inputForm {
+    max-width: 500px;
+    margin: 0 auto;
+    margin-top: 50px;
+  
+  }
+  
+label {
+    font-size: 20px;
+}
+
+input, select, button {
+    width: 100%;
+    display: block;
+    margin: 10px 0px;
+}
+
+input, select {
+    height: 30px;
+}
+
+button {
+    height: 50px;
+    border-radius: 35px;
+    padding: 0px;
+    background-color: rgb(116, 86, 151);
+    border: none;
+    color: white;
+    margin-top: 30px;
+
+}
+
+button:hover {
+    background-color:  rgb(76, 43, 114);
+}

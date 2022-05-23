@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from "axios";
-
+import "./../../styles/forms.css"
 
 export default function NewItem({cities, createItem, setPage}) {
 
@@ -29,7 +29,7 @@ export default function NewItem({cities, createItem, setPage}) {
 
         //Call to server to update the database and return the id of the new item
         axios.post(
-            '/inventory/items', 
+            '/items', 
             {itemName, stock, city}, 
             {headers: {'content-type': 'application/json'}}
         )
@@ -84,7 +84,7 @@ export default function NewItem({cities, createItem, setPage}) {
                 })}
             </select>
 
-            <button onClick={() => processCreateItem()} type="button">Submit</button>
+            <button onClick={() => processCreateItem()} type="button">Create</button>
 
             {error && <p className="errorMessage">{error}</p>}
 

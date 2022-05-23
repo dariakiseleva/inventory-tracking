@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import axios from 'axios';
 
-import './App.css';
+import './styles/index.css';
 
 import Header from "./components/Header"
 import Inventory from "./components/Inventory"
@@ -56,8 +56,8 @@ function App() {
   //Make several API calls and update the state at the same time
   useEffect(() => {
     Promise.all([
-      axios.get('http://localhost:5000/inventory/items'),
-      axios.get('http://localhost:5000/cities'),
+      axios.get('/items'),
+      axios.get('/cities'),
     ])
     .then((all) => {
       setState(prev => ({

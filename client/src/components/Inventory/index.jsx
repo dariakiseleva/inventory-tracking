@@ -1,5 +1,5 @@
-import "./inventory-styles.css"
-import React, {useEffect, useState} from "react";
+import "./../../styles/tables.css"
+import React from "react";
 import axios from "axios";
 
 
@@ -7,7 +7,7 @@ export default function Inventory ({inventory, cities, deleteItem, setPage, sele
 
     //Process item deletion - first in the database, then locally to re-render
     const processDeleteItem = (id) => {
-        axios.delete(`/inventory/item/${id}`)
+        axios.delete(`/item/${id}`)
         .then(() => {
             deleteItem(id);
         })
