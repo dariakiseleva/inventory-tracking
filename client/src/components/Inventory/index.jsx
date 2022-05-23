@@ -1,4 +1,4 @@
-import "./inventory-styles.scss"
+import "./inventory-styles.css"
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 

@@ -1,7 +1,9 @@
+import React from "react";
+
 export default function NewShipment() {
 
     return (
-        <>New shipment</>
+        <p>New shipment</p>
     );
 
 }

@@ -1,4 +1,5 @@
-import "./header-styles.scss";
+import React from "react";
+import "./header-styles.css";
 
 export default function Header ({setPage}){
     return (
