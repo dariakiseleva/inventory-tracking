@@ -2,14 +2,18 @@ import React, { useState } from 'react';
 import axios from "axios";
 
 
-export default function EditItem({cities, createItem, setPage}) {
+export default function EditItem({cities, inventory, editItem, setPage, item_id}) {
 
-    const [itemName, setItemName] = useState("");
-    const [stock, setStock] = useState("");
-    const [city, setCity] = useState("");
+    const prevName = inventory[item_id].name
+    const prevStock = inventory[item_id].stock
+    const prevCity = inventory[item_id].city_id
+
+    const [itemName, setItemName] = useState(prevName);
+    const [stock, setStock] = useState(prevStock);
+    const [city, setCity] = useState(prevCity);
     const [error, setError] = useState("");
 
-    const processCreateItem = () => {
+    const processEditItem = () => {
 
         //Validate data entry
         if (!itemName || !stock || !city) {
@@ -23,17 +27,15 @@ export default function EditItem({cities, createItem, setPage}) {
             return;
         }
 
-
-        //Call to server to update the database and return the id of the new item
-        axios.post(
-            '/inventory/items', 
+        //Call to server to update the item in the database
+        axios.patch(
+            `/inventory/item/${item_id}`,
             {itemName, stock, city}, 
             {headers: {'content-type': 'application/json'}}
         )
-        //Update local storage with new item
+        //Update local storage with new item data
         .then((res) => {
-            const inserted_id = res.data.id
-            createItem(inserted_id, itemName, city, stock);
+            editItem(item_id, itemName, city, stock);
             setPage("Inventory")
         })
     }
@@ -41,7 +43,7 @@ export default function EditItem({cities, createItem, setPage}) {
     return (
         <form className="inputForm">
 
-            <h1>Edit an new inventory item</h1>
+            <h1>Editing item ID {item_id}</h1>
 
             <label>Item name</label>
             <input 
@@ -81,7 +83,7 @@ export default function EditItem({cities, createItem, setPage}) {
                 })}
             </select>
 
-            <button onClick={() => processCreateItem()} type="button">Submit</button>
+            <button onClick={() => processEditItem()} type="button">Submit</button>
 
             {error && <p className="errorMessage">{error}</p>}
 

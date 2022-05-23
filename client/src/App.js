@@ -15,7 +15,14 @@ function App() {
 
   const [page, setPage] = useState("Inventory");
 
-  const [state, setState] = useState({inventory: {}, cities: {}});
+  const [state, setState] = useState({inventory: {}, cities: {}, itemToEdit: -1});
+
+  const selectItemToEdit = (id) => {
+    setState(prev => {
+      const newState = {...prev, itemToEdit: id};
+      return newState;     
+    });
+  }
 
 
   //Delete item in local storage
@@ -32,6 +39,16 @@ function App() {
     setState(prev => {
       const newState = {...prev};
       newState.inventory[id] = {id: id, name: name, city_id: city_id, stock: stock, shipped: 0}
+      return newState;      
+    })
+  }
+
+  //Create item in local storage
+  const editItem = (id, name, city_id, stock) => {
+    setState(prev => {
+      const updatedItem = {...prev.inventory[id], name: name, city_id: city_id, stock: stock}
+      const newState = {...prev};
+      newState.inventory[id] = updatedItem;
       return newState;      
     })
   }
@@ -60,10 +77,11 @@ function App() {
       <main>
         {page==="Inventory" && 
           <Inventory 
-            onDelete={deleteItem} 
+            deleteItem={deleteItem} 
             cities={state.cities} 
             inventory={state.inventory}
             setPage={setPage}
+            selectItemToEdit={selectItemToEdit}
           />
         }
         {page==="NewItem" && 
@@ -76,9 +94,11 @@ function App() {
 
         {page==="EditItem" && 
           <EditItem 
-            cities={state.cities} 
-            createItem={createItem} 
+            editItem={editItem} 
             setPage={setPage}
+            item_id={state.itemToEdit}
+            cities={state.cities} 
+            inventory={state.inventory}
           />
         }
         

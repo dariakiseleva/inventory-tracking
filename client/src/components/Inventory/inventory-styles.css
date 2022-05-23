@@ -1,15 +1,17 @@
 
 .deleteLink{
   color: rgb(114, 26, 26);
+  padding: 5px;
 
 }
 
 .editLink{
   color: rgb(2, 119, 80);
+  padding: 5px;
 }
 
-.deleteLink:hover .editLink:hover {
-  text-decoration: underline;
+.deleteLink:hover, .editLink:hover {
+  background-color: rgb(233, 194, 233);
 }
 
 .errorMessage {

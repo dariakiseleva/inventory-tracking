@@ -3,17 +3,24 @@ import React, {useEffect, useState} from "react";
 import axios from "axios";
 
 
-export default function Inventory ({inventory, cities, onDelete, setPage}) {
+export default function Inventory ({inventory, cities, deleteItem, setPage, selectItemToEdit}) {
 
     //Process item deletion - first in the database, then locally to re-render
     const processDeleteItem = (id) => {
         axios.delete(`/inventory/item/${id}`)
         .then(() => {
-            onDelete(id);
+            deleteItem(id);
         })
     }
 
+    //When the Edit link is clicked on an item
+    const processClickEdit = (id) => {
+        selectItemToEdit(id);
+        setPage("EditItem");
+    }
 
+
+    //Generate a table row for each inventory item
     const inventoryRows = Object.values(inventory).map(item => {
         return (
             <tr key={item.id}>
@@ -23,12 +30,13 @@ export default function Inventory ({inventory, cities, onDelete, setPage}) {
                 <td>{item.shipped}</td>
                 <td>{cities[item.city_id].name}</td> 
                 <td>{cities[item.city_id].weather}</td>
-                <td><a className="editLink" onClick={() => setPage("EditItem")}>Edit</a></td>
+                <td><a className="editLink" onClick={() => processClickEdit(item.id)}>Edit</a></td>
                 <td><a className="deleteLink" onClick={() => processDeleteItem(item.id)}>Delete</a></td>
             </tr>
         )
     });
 
+    //Render content
     return (
             <table>
                 <tbody>

@@ -39,16 +39,33 @@ app.get("/inventory/items", (req, res) => {
 //CREATE NEW ITEM
 app.post("/inventory/items", (req, res) => {
 
-
     const {itemName, city, stock} = req.body;
-
-    console.log("Inserting " + itemName + city + stock);
-
     const query = "INSERT INTO inventory_item (name, city_id, stock) VALUES (?,?,?) returning id";
     db.all(query, [itemName, city, stock], (error, returning) => {
         res.status(200).json(returning[0]);
     })    
 });
+
+
+//CHANGE ITEM DATA
+app.patch("/inventory/item/:id", (req, res) => {
+    const id = req.params.id;
+    const {itemName, city, stock} = req.body;
+    const query = `UPDATE inventory_item SET name="${itemName}", city_id=${city}, stock=${stock} WHERE id=${id}`;
+    db.all(query, () => {
+        res.status(200).json({})
+    })    
+})
+
+
+//DELETE ITEM
+app.delete("/inventory/item/:id", (req, res) => {
+    const id = req.params.id;
+    const query = `DELETE FROM inventory_item WHERE id=${id};`
+    db.all(query, (err) => {
+        return res.status(200).json({});
+    });
+})
 
 
 app.get("/cities/", (req, res) => {
@@ -91,18 +108,6 @@ app.get("/cities/", (req, res) => {
 
       });
 });
-
-
-app.delete("/inventory/item/:id", (req, res) => {
-    const id = req.params.id;
-
-    const query = `DELETE FROM inventory_item WHERE id=${id};`
-    db.all(query, (err) => {
-        return res.status(200).json({});
-    });
-
-})
-
 
 
 // Default response for any other request

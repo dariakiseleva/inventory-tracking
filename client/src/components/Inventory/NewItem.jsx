@@ -12,6 +12,9 @@ export default function NewItem({cities, createItem, setPage}) {
     const processCreateItem = () => {
 
         //Validate data entry
+
+        console.log(itemName, stock, city)
+
         if (!itemName || !stock || !city) {
             setError("ERROR: Incomplete form");
             return;
