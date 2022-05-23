@@ -3,6 +3,8 @@ const cors = require('cors');
 const request = require('request');
 const axios = require('axios');
 
+require('dotenv').config({ path: './.env' })
+
 
 const app = express();
 
@@ -57,7 +59,7 @@ app.get("/cities/", (req, res) => {
 
         //Create an array of promises for the processed result of weather API calls for each city
         const weatherPromises = rows.map(city => {
-            const key = "056c9e3befa23c30af5c596b579c5ede";
+            const key = process.env.WEATHER_API_KEY;
             const lat = city.latitude;
             const lon = city.longitude;
 
