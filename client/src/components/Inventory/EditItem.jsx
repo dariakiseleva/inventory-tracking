@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from "axios";
 
 
-export default function NewItem({cities, createItem, setPage}) {
+export default function EditItem({cities, createItem, setPage}) {
 
     const [itemName, setItemName] = useState("");
     const [stock, setStock] = useState("");
@@ -41,7 +41,7 @@ export default function NewItem({cities, createItem, setPage}) {
     return (
         <form className="inputForm">
 
-            <h1>Create a new inventory item</h1>
+            <h1>Edit an new inventory item</h1>
 
             <label>Item name</label>
             <input 

@@ -14,52 +14,10 @@ app.use(function(req, res, next) {
     next();
   });
 
-
-//DRAFTS
-app.get("/inventory/all/test", (req, res) => {
-
-    const key = "056c9e3befa23c30af5c596b579c5ede";
-    const lat = "43.651070";
-    const lon = "-79.347015";
-
-
-    request(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${key}&units=metric`, (error, response, body) => {
-        const weatherData = JSON.parse(body);
-        const temp = Math.round(weatherData.main.temp);
-        const feelsLike = Math.round(weatherData.main.feels_like);
-        const description = weatherData.weather[0].description;
-        const currentWeather = `${temp}°C, feels like ${feelsLike}°C, ${description}`;
-
-
-        const inventoryData = {
-            1454543: {
-                id: 1454543,
-                name: "Plastic broom",
-                stock: 456,
-                shipped: 12,
-                city: "Montreal",
-                weather: currentWeather
-            },
-            1454546: {
-                id: 1453,
-                name: "Plastic flower",
-                stock: 4656,
-                shipped: 162,
-                city: "Toronto",
-                weather: currentWeather
-            }
-        }
-
-
-        res.json(inventoryData)
-    })
-    
-})
-
-
+app.use(express.json());
 
 //ACTUAL ROUTES
-app.get("/inventory/items", (req, res, next) => {
+app.get("/inventory/items", (req, res) => {
     const query = "select * from inventory_item"
     db.all(query, (err, rows) => {
 
@@ -77,11 +35,24 @@ app.get("/inventory/items", (req, res, next) => {
       });
 });
 
+//CREATE NEW ITEM
+app.post("/inventory/items", (req, res) => {
 
-app.get("/cities/", (req, res, next) => {
+
+    const {itemName, city, stock} = req.body;
+
+    console.log("Inserting " + itemName + city + stock);
+
+    const query = "INSERT INTO inventory_item (name, city_id, stock) VALUES (?,?,?) returning id";
+    db.all(query, [itemName, city, stock], (error, returning) => {
+        res.status(200).json(returning[0]);
+    })    
+});
+
+
+app.get("/cities/", (req, res) => {
     const query = "select * from city"
     db.all(query, (err, rows) => {
-
 
         //Create an array of promises for the processed result of weather API calls for each city
         const weatherPromises = rows.map(city => {
@@ -119,6 +90,17 @@ app.get("/cities/", (req, res, next) => {
 
       });
 });
+
+
+app.delete("/inventory/item/:id", (req, res) => {
+    const id = req.params.id;
+
+    const query = `DELETE FROM inventory_item WHERE id=${id};`
+    db.all(query, (err) => {
+        return res.status(200).json({});
+    });
+
+})
 
 
 

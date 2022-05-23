@@ -1,5 +1,28 @@
 @import "../../variables.scss";
 
+
+.deleteLink{
+  color: $red-color;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.editLink{
+  color: $green-color;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.errorMessage {
+  color: $red-color;
+  text-align: center;
+  font-weight: bold;
+}
+
 table {
     border-collapse: collapse;
     border: 2px solid rgb(200,200,200);
@@ -60,6 +83,10 @@ table {
     border: none;
     color: white;
     margin-top: 30px;
+
+    &:hover {
+      background-color: $darker-color;
+    }
   }
 }
   
