@@ -17,9 +17,9 @@ app.use(function(req, res, next) {
 
 app.use(express.json());
 
-//ACTUAL ROUTES
+//GET ITEMS IN INVENTORY
 app.get("/items", (req, res) => {
-    const query = "select * from item"
+    const query = "SELECT * FROM item"
     db.all(query, (err, rows) => {
 
         //Rearrange the data as an object with item IDs as keys
@@ -59,14 +59,15 @@ app.patch("/item/:id", (req, res) => {
 //DELETE ITEM
 app.delete("/item/:id", (req, res) => {
     const id = req.params.id;
-    const query = `DELETE FROM item WHERE id=${id};`
+    const query = `UPDATE item SET in_inventory=0 WHERE id=${id}`;
     db.all(query, (err) => {
         return res.status(200).json({});
     });
 })
 
 
-app.get("/cities/", (req, res) => {
+//GET CITIES
+app.get("/cities", (req, res) => {
     const query = "select * from city"
     db.all(query, (err, rows) => {
 
@@ -106,6 +107,33 @@ app.get("/cities/", (req, res) => {
 
       });
 });
+
+app.get("/shipments", (req, res) => {
+
+    const query = "SELECT shipment_id, item_id, created, quantity, city_id FROM shipment JOIN shipment_item ON shipment.id=shipment_item.shipment_id"
+
+    db.all(query, (err, rows) => {
+        const shipments = {}
+
+        //Rearrange data so that shipment items are in an array
+        for (let row of rows) {
+            //Create shipment if it doesn't exist yet
+            if (!shipments[row.shipment_id]) {
+                shipments[row.shipment_id] = {
+                    id: row.shipment_id,
+                    created: row.created,
+                    city_id: row.city_id,
+                    shipmentItems: []
+                }
+            }
+            //Add shipment item information into the relevant shipments
+            shipments[row.shipment_id].shipmentItems.push({id: row.item_id, quantity: row.quantity})
+        }
+    
+        res.status(200).json(shipments);
+
+    });
+})
 
 
 // Default response for any other request

@@ -15,7 +15,7 @@ function App() {
 
   const [page, setPage] = useState("Inventory");
 
-  const [state, setState] = useState({inventory: {}, cities: {}, itemToEdit: -1});
+  const [state, setState] = useState({inventory: {}, cities: {}, shipments: {}, itemToEdit: -1});
 
   const selectItemToEdit = (id) => {
     setState(prev => {
@@ -29,7 +29,7 @@ function App() {
   const deleteItem = (id) => {
     setState(prev => {
       const newState = {...prev};
-      delete newState.inventory[id];
+      newState.inventory[id].in_inventory = 0;
       return newState;      
     })
   }
@@ -38,7 +38,7 @@ function App() {
   const createItem = (id, name, city_id, stock) => {
     setState(prev => {
       const newState = {...prev};
-      newState.inventory[id] = {id: id, name: name, city_id: city_id, stock: stock, shipped: 0}
+      newState.inventory[id] = {id: id, name: name, city_id: city_id, stock: stock, in_inventory: 0, shipped: 0}
       return newState;      
     })
   }
@@ -58,12 +58,14 @@ function App() {
     Promise.all([
       axios.get('/items'),
       axios.get('/cities'),
+      axios.get('/shipments')
     ])
     .then((all) => {
       setState(prev => ({
         ...prev, 
         inventory: all[0].data, 
-        cities: all[1].data
+        cities: all[1].data,
+        shipments: all[2].data,
       }))
     })
   }, []);
@@ -102,9 +104,12 @@ function App() {
           />
         }
         
-       
-
-        {page==="Shipments" && <Shipments />}
+        {page==="Shipments" && 
+          <Shipments 
+            inventory={state.inventory}
+            cities={state.cities}
+            shipments={state.shipments}
+          />}
         {page==="NewShipment" && <NewShipment />}
 
       </main>

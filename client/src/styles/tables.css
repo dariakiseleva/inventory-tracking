@@ -53,3 +53,39 @@
   caption {
     padding: 10px;
   }
+
+  .innerTable {
+    border: none;
+  }
+
+  .innerTable th, .innerTable tr td {
+    background-color: transparent;
+    padding: 5px 0px;
+    width: 25%;
+  }
+
+  .innerTable th {
+    font-style: italic;
+    font-weight: normal;
+  }
+
+  table.innerTable {
+    border-collapse: collapse;
+  }
+  table.innerTable td, table.innerTable th {
+    border: 1px dashed rgb(200,200,200);
+  }
+  table.innerTable tr:first-child th {
+    border-top: 0;
+  }
+  table.innerTable tr:last-child td {
+    border-bottom: 0;
+  }
+  table.innerTable tr td:first-child,
+  table.innerTable tr th:first-child {
+    border-left: 0;
+  }
+  table.innerTable tr td:last-child,
+  table.innerTable tr th:last-child {
+    border-right: 0;
+  }

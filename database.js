@@ -17,7 +17,8 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name text, 
             city_id INTEGER, 
-            stock INTEGER, 
+            stock INTEGER,
+            in_inventory INTEGER DEFAULT 1,
             shipped INTEGER DEFAULT 0
             )`,
         (err) => {
@@ -37,15 +38,16 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         //SHIPMENTS
         db.run(`CREATE TABLE shipment (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            created DATETIME DEFAULT CURRENT_TIMESTAMP
+            created DATETIME DEFAULT CURRENT_TIMESTAMP,
+            city_id INTEGER
             )`,
         (err) => {
             if(!err){
-                const insert_shipment = db.prepare("INSERT INTO shipment DEFAULT VALUES");
-                //Create 3 shipments
-                insert_shipment.run();
-                insert_shipment.run();
-                insert_shipment.run();
+                //Create 3 shipments from different cities
+                const insert_shipment = db.prepare("INSERT INTO shipment (city_id) VALUES (?)");
+                insert_shipment.run(["1"]);
+                insert_shipment.run(["2"]);
+                insert_shipment.run(["3"]);
             }
 
         });  

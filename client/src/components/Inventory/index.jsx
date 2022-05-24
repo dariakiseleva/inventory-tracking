@@ -1,5 +1,5 @@
 import "./../../styles/tables.css"
-import React from "react";
+import React, {Fragment} from "react";
 import axios from "axios";
 
 
@@ -12,16 +12,18 @@ export default function Inventory ({inventory, cities, deleteItem, setPage, sele
             deleteItem(id);
         })
     }
-
+    
     //When the Edit link is clicked on an item
-    const processClickEdit = (id) => {
+    const processClickEditItem = (id) => {
         selectItemToEdit(id);
         setPage("EditItem");
     }
 
-
     //Generate a table row for each inventory item
     const inventoryRows = Object.values(inventory).map(item => {
+
+        if (item.in_inventory===0) return;
+
         return (
             <tr key={item.id}>
                 <td>{item.id}</td>
@@ -30,7 +32,7 @@ export default function Inventory ({inventory, cities, deleteItem, setPage, sele
                 <td>{item.shipped}</td>
                 <td>{cities[item.city_id].name}</td> 
                 <td>{cities[item.city_id].weather}</td>
-                <td><a className="editLink" onClick={() => processClickEdit(item.id)}>Edit</a></td>
+                <td><a className="editLink" onClick={() => processClickEditItem(item.id)}>Edit</a></td>
                 <td><a className="deleteLink" onClick={() => processDeleteItem(item.id)}>Delete</a></td>
             </tr>
         )
@@ -38,10 +40,12 @@ export default function Inventory ({inventory, cities, deleteItem, setPage, sele
 
     //Render content
     return (
+        <Fragment>
+            <h1>Inventory</h1>
             <table>
                 <tbody>
                 <tr className="header-row">
-                    <th>ID</th>
+                    <th>Item ID</th>
                     <th>Name</th>
                     <th>Quantity in stock</th>
                     <th>Quantity shipped</th>
@@ -56,5 +60,6 @@ export default function Inventory ({inventory, cities, deleteItem, setPage, sele
                 </tbody>
 
             </table>
+        </Fragment>
     )
 }
