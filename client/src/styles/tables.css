@@ -89,3 +89,9 @@
   table.innerTable tr th:last-child {
     border-right: 0;
   }
+
+
+  .warning-cell {
+    color: rgb(114, 26, 26);
+    font-weight: bold;
+  }

@@ -136,6 +136,41 @@ app.get("/shipments", (req, res) => {
 })
 
 
+app.post("/shipments", (req, res) => {
+
+    //Helper function - add each shipment item
+    const addShipmentItem = (itemID, shipmentID, quant) => {
+        const query = "INSERT INTO shipment_item (item_id, shipment_id, quantity) VALUES (?, ?, ?)"
+        db.all(query, [itemID, shipmentID, quant]);
+    }
+
+    const updateInventory = (id, stock, shipped) => {
+        const query = "UPDATE item SET stock=?, shipped=? WHERE id=?"
+        db.all(query, [stock, shipped, id]);
+    }
+
+    //Helper function - update inventory item data
+
+    const {shipmentItemData, city} = req.body;
+
+    const query = "INSERT INTO shipment (city_id) VALUES (?) RETURNING id, created";
+    db.all(query, [city], (err, rows) => {
+
+        const shipmentID = rows[0].id
+        const created = rows[0].created
+
+        for (let item of shipmentItemData) {
+            addShipmentItem(item.id, shipmentID, item.quant);
+            updateInventory(item.id, item.stock, item.shipped)
+        }
+        
+
+
+        res.status(200).json({shipmentID, created});
+    })
+
+})
+
 // Default response for any other request
 app.use((req, res) => {
     res.status(404);

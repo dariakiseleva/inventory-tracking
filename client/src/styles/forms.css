@@ -1,6 +1,10 @@
 
+select {
+    background-color: white;
+}
+
 .inputForm {
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
     margin-top: 50px;
   
@@ -33,4 +37,25 @@ button {
 
 button:hover {
     background-color:  rgb(76, 43, 114);
+}
+
+.fancySelector{
+    background-color: white;
+}
+
+.fancyPlaceholder {
+    color: grey;
+    font-style: italic;
+}
+
+.shipmentQuantModifier {
+    width: 100px;
+    text-align: center;
+    margin: 0 auto;
+    border: none;
+}
+
+.warning-form {
+    color: white;
+    background-color: rgb(114, 26, 26);
 }

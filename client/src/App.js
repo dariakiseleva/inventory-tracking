@@ -24,7 +24,6 @@ function App() {
     });
   }
 
-
   //Delete item in local storage
   const deleteItem = (id) => {
     setState(prev => {
@@ -38,7 +37,7 @@ function App() {
   const createItem = (id, name, city_id, stock) => {
     setState(prev => {
       const newState = {...prev};
-      newState.inventory[id] = {id: id, name: name, city_id: city_id, stock: stock, in_inventory: 0, shipped: 0}
+      newState.inventory[id] = {id: id, name: name, city_id: city_id, stock: stock, in_inventory: 1, shipped: 0}
       return newState;      
     })
   }
@@ -52,6 +51,25 @@ function App() {
       return newState;      
     })
   }
+
+
+  //Create shipment
+  const createShipment = (shipmentID, created, city, shipmentItemData) => {
+
+    setState(prev => {
+      const newState = {...prev};
+      const newShipment = {id: shipmentID, created, city_id: city, shipmentItems: []}
+      shipmentItemData.forEach(item => {
+        newState.inventory[item.id].stock = item.stock
+        newState.inventory[item.id].shipped = item.shipped
+        newShipment.shipmentItems.push({id: item.id, quantity: item.quant})
+      });
+
+      newState.shipments[shipmentID] = newShipment;
+      return newState;
+    })
+  }
+
 
   //Make several API calls and update the state at the same time
   useEffect(() => {
@@ -110,7 +128,15 @@ function App() {
             cities={state.cities}
             shipments={state.shipments}
           />}
-        {page==="NewShipment" && <NewShipment />}
+
+        {page==="NewShipment" && 
+          <NewShipment
+            inventory={state.inventory}
+            cities={state.cities}
+            setPage={setPage}
+            createShipment={createShipment}
+          />
+        }
 
       </main>
 

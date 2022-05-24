@@ -1,6 +1,5 @@
 // import "./shipment-styles.css"
 import React, { Fragment } from "react";
-import axios from "axios";
 import "./../../styles/tables.css"
 
 export default function Shipments ({inventory, cities, shipments}) {
@@ -10,15 +9,12 @@ export default function Shipments ({inventory, cities, shipments}) {
 
         //Rows of subtable listing items in the shipment
         const shipmentItemRows = shipment.shipmentItems.map((shipmentItem) => {
-
-            console.log(shipmentItem);
-
             return (
                 <tr key={shipmentItem.id}>
                     <td>{shipmentItem.id}</td>                    
                     <td>{inventory[shipmentItem.id].name}</td>
                     <td>{shipmentItem.quantity}</td>
-                    <td>{shipmentItem.id===1 ? "No longer in inventory" : "-"}</td>
+                    <td>{inventory[shipmentItem.id].in_inventory===0 ? "No longer in inventory" : "-"}</td>
                 </tr>
             )
         })

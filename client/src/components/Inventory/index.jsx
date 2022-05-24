@@ -22,13 +22,17 @@ export default function Inventory ({inventory, cities, deleteItem, setPage, sele
     //Generate a table row for each inventory item
     const inventoryRows = Object.values(inventory).map(item => {
 
-        if (item.in_inventory===0) return;
+        if (item.in_inventory===0) {
+            return null;
+        }
 
         return (
             <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.name}</td>
-                <td>{item.stock}</td>
+                <td className={item.stock===0? "warning-cell" : ""}>
+                    {item.stock===0? "Out of stock, please update or delete" : item.stock}
+                </td>
                 <td>{item.shipped}</td>
                 <td>{cities[item.city_id].name}</td> 
                 <td>{cities[item.city_id].weather}</td>

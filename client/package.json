@@ -4,8 +4,9 @@
   "private": true,
   "dependencies": {
     "axios": "^0.27.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
+    "react": "next",
+    "react-dom": "next",
+    "react-dropdown-select": "^4.8.4",
     "react-scripts": "1.0.17",
     "sass": "^1.52.1"
   },
